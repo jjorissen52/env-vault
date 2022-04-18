@@ -17,23 +17,28 @@
   },
   "scripts": {
     "ev": "ts-node src/cli.ts",
-    "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx --fix",
+    "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "yarn lint --fix",
     "test": "jest",
     "clean": "rm -rf dist build package",
     "ts-node": "ts-node",
-    "docs": "typedoc --entryPoints src/main.ts",
+    "docs": "typedoc --entryPoints src/cli.ts",
     "build": "tsc -p tsconfig.json",
     "watch": "tsc --watch -p tsconfig.json",
-    "compile:mac": "yarn build && pkg -t macos-x64 -o ev .",
-    "compile:linux": "yarn build && pkg -t linux-x64 -o ev .",
-    "compile:win": "yarn build && pkg -t win-x64 -o ev .",
+    "precompile": "yarn build",
+    "compile": "pkg -o ev .",
+    "compile:mac": "pkg -t macos-x64 -o ev .",
+    "compile:linux": "pkg -t linux-x64 -o ev .",
+    "compile:win": "pkg -t win-x64 -o ev .",
+    "compile:all": "pkg -t macos-x64,linux-x64,win-x64 -o ev .",
+    "postcompile": "yarn clean",
     "release": "./scripts/release.sh",
     "prepare": "husky install"
   },
   "devDependencies": {
     "@types/commander": "^2.12.2",
     "@types/figlet": "^1.5.4",
-    "@types/jest": "^26.0.21",
+    "@types/jest": "^27.4.1",
     "@types/lodash": "^4.14.181",
     "@types/node": "^15.0.1",
     "@typescript-eslint/eslint-plugin": "^4.19.0",
@@ -64,5 +69,10 @@
     "assets": [
       "node_modules/figlet/fonts/Standard.flf"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "yarn lint"
+    }
   }
 }

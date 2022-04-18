@@ -6,15 +6,15 @@ if [ -z "$1" ]; then
 fi
 
 cleanup() {
+  rm -f dist
   rm -f ev-mac ev-linux ev.exe
 }
 trap cleanup EXIT
 
-yarn compile:mac && mv ev ev-mac
-yarn compile:linux && mv ev ev-linux
-yarn compile:win
+yarn compile:all
 
 gh release create "$1" \
-  './ev-mac#MacOs Binary' \
+  './ev-macos#MacOs Binary' \
   './ev-linux#Linux Binary' \
-  './ev.exe#Windows Binary'
+  './ev-win.exe#Windows Binary' \
+  "$@"
