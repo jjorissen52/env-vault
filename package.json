@@ -27,6 +27,7 @@
     "compile:mac": "yarn build && pkg -t macos-x64 -o ev .",
     "compile:linux": "yarn build && pkg -t linux-x64 -o ev .",
     "compile:win": "yarn build && pkg -t win-x64 -o ev .",
+    "release": "./scripts/release.sh",
     "prepare": "husky install"
   },
   "devDependencies": {
