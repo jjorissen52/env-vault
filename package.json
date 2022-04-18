@@ -1,18 +1,22 @@
 {
-  "name": "synv",
+  "name": "env-vault",
   "version": "0.1.0",
-  "description": "Utility for environment synchronization. Uses 1password as a secret store.",
+  "description": "Utility for environment synchronization with credentials vaults.",
   "license": "MIT",
   "keywords": [
-    "synv"
+    "env",
+    "environment",
+    "vault",
+    "secrets",
+    "1password"
   ],
   "main": "./dist/tsc/main.js",
   "types": "./dist/tsc/main.d.ts",
   "bin": {
-    "synv": "./dist/tsc/cli.js"
+    "ev": "./dist/tsc/cli.js"
   },
   "scripts": {
-    "synv": "ts-node src/cli.ts",
+    "ev": "ts-node src/cli.ts",
     "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx --fix",
     "test": "jest",
     "clean": "rm -rf dist build package",
@@ -20,8 +24,9 @@
     "docs": "typedoc --entryPoints src/main.ts",
     "build": "tsc -p tsconfig.json",
     "watch": "tsc --watch -p tsconfig.json",
-    "compile:mac": "yarn build && pkg -t node16-macos-x64 -o synv .",
-    "compile:linux": "yarn build && pkg -t node16-linux-x64 -o synv .",
+    "compile:mac": "yarn build && pkg -t macos-x64 -o ev .",
+    "compile:linux": "yarn build && pkg -t linux-x64 -o ev .",
+    "compile:windows": "yarn build && pkg -t win-x64 -o ev .",
     "prepare": "husky install"
   },
   "devDependencies": {
@@ -56,7 +61,7 @@
   },
   "pkg": {
     "assets": [
-      "node_modules/figlet/fonts/**/*"
+      "node_modules/figlet/fonts/Standard.flf"
     ]
   }
 }

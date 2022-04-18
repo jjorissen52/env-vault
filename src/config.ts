@@ -6,10 +6,10 @@ import { getPathType } from "./utils";
 import { clone, merge } from "lodash";
 // @ts-ignore
 import isInvalidPath from "is-invalid-path";
-import { OnePasswordResolver } from "./vaults/op/resolver";
+import { OnePasswordResolver } from "./vaults/op";
 import * as console from "console";
 
-const CONFIG_NAME = "synv.json";
+const CONFIG_NAME = "ev.json";
 const DEFAULT_CONFIG_DIR = path.resolve(
   process.env[process.platform === "win32" ? "USERPROFILE" : "HOME"] ?? "HOME",
   ".config/"

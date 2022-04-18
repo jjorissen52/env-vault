@@ -4,15 +4,16 @@ import { program } from "commander";
 import { textSync } from "figlet";
 
 import _config from "./config";
-import { runPopulate } from "./op";
+import { runPopulate as opPopulate } from "./vaults/op";
 import { format } from "util";
+import { ERROR_CODES, exit_with_error } from "./error";
 
 program
   .version("0.1.0")
   .addHelpText(
     "before",
     `${chalk.blueBright(
-      textSync("synv\n   Sync \n   Env", {
+      textSync("ev\n   Env \n   Vault", {
         horizontalLayout: "full",
       })
     )}\n\n`
@@ -61,7 +62,7 @@ program
   const defaults_blurb = (scope: string): string =>
     format("show or set %s defaults; use without flags to show", scope);
   const vault_blurb = (scope: string): string =>
-    format("manage synv vault config for %s", scope);
+    format("manage ev vault config for %s", scope);
 
   config
     .command("defaults")
@@ -151,7 +152,18 @@ program
     .argument("<name>", "name of comparison to run")
     .option("-f,--force", "overwrite existing file")
     .action((name, { force }) => {
-      runPopulate(name, _config, force);
+      const comparison = _config.getComparison(name);
+      const { vault_type } = comparison;
+      switch (vault_type) {
+        case "1password":
+          opPopulate(comparison, force);
+          break;
+        default:
+          exit_with_error(
+            `named config was invalid; invalid vault_type ${vault_type}`,
+            ERROR_CODES.INVALID_VAULT_TYPE
+          );
+      }
     });
 }
 
