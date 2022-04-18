@@ -33,6 +33,7 @@
     "compile:all": "pkg -t macos-x64,linux-x64,win-x64 -o ev .",
     "postcompile": "yarn clean",
     "release": "./scripts/release.sh",
+    "postrelease": "yarn clean",
     "postinstall": "husky install",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable"
