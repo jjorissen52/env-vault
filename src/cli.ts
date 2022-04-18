@@ -26,7 +26,7 @@ program
   const config = program
     .command("config")
     .description(
-      "The config subcommand is responsible for displaying and modifying global defaults," +
+      "The config subcommand is responsible for displaying and modifying global defaults, " +
         "vault defaults, and comparisons configurations."
     );
 
@@ -140,7 +140,7 @@ program
   program
     .command("compare")
     .description(
-      "compare variable declarations of an env file and template file for the given comparison"
+      "compare variable declarations of an env file and template file for the given configuration"
     )
     .argument("<name>", "name of comparison to run")
     .option(
@@ -185,7 +185,7 @@ program
 {
   program
     .command("populate")
-    .description("populate an env file based on the given comparison")
+    .description("populate an env file based on the given configuration")
     .argument("<name>", "name of comparison to run")
     .option("-f,--force", "overwrite existing file")
     .action((name, { force }) => {
