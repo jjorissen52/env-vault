@@ -12,4 +12,3 @@ coverage
 config.json
 *.html
 .editorconfig
-.husky
