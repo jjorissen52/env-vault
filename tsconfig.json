@@ -21,7 +21,8 @@
     "outDir": "./dist/tsc/",
     "types": [
       "node",
-      "jest"
+      "jest",
+      "@types/jest"
     ],
     "typeRoots": [
       "types"
