@@ -7,6 +7,7 @@ import _config from "./config";
 import { runPopulate as opPopulate } from "./vaults/op";
 import { format } from "util";
 import { ERROR_CODES, exit_with_error } from "./error";
+import compare from "./compare";
 
 program
   .version("0.1.0")
@@ -139,16 +140,52 @@ program
   program
     .command("compare")
     .description(
-      "Compare variable definitions between two files (only supports variable names consisting of capitals and underscores)"
+      "compare variable declarations of an env file and template file for the given comparison"
     )
     .argument("<name>", "name of comparison to run")
-    .option("--no-fail", "if present, failure results in an exit code of 0")
-    .action((name, { noFail }) => console.log({ name, noFail }));
+    .option(
+      "-r,--regex <regex>",
+      "regex pattern that matches a variable declaration line"
+    )
+    .option(
+      "-i,--ignore <regex>",
+      "regex pattern for variable declaration lines to ignore"
+    )
+    .option(
+      "-n,--no-fail",
+      "emit a zero exit code even when the comparison fails"
+    )
+    .option(
+      "-h,--hint <hint>",
+      "tell the user what to do in case of failure, useful in automation"
+    )
+    .action((name, { fail, hint, regex, ignore }) => {
+      const comparison = _config.getComparison(name);
+      const { template_path, env_file_path } = comparison;
+      const mismatch = compare(template_path, env_file_path, {
+        match: regex,
+        ignore,
+      });
+      if (mismatch) {
+        console.error(
+          chalk.red(
+            "The environment variables defined locally differed from the indicated template."
+          )
+        );
+        if (hint) console.info(chalk.greenBright(hint));
+        process.stdout.write(
+          chalk.blueBright(JSON.stringify(mismatch, null, 2))
+        );
+        process.exit(Number(!!fail));
+      }
+      console.log("👍");
+    });
 }
 
 {
   program
     .command("populate")
+    .description("populate an env file based on the given comparison")
     .argument("<name>", "name of comparison to run")
     .option("-f,--force", "overwrite existing file")
     .action((name, { force }) => {
