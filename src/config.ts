@@ -14,7 +14,7 @@ const DEFAULT_CONFIG_DIR = path.resolve(
   process.env[process.platform === "win32" ? "USERPROFILE" : "HOME"] ?? "HOME",
   ".config/"
 );
-const INDICATED_CONFIG_DIR = process.env.SYNV_CONFIG_DIR ?? DEFAULT_CONFIG_DIR;
+const INDICATED_CONFIG_DIR = process.env.EV_CONFIG_DIR ?? DEFAULT_CONFIG_DIR;
 
 const ConfigResolvers = {
   "1password": OnePasswordResolver,
@@ -51,7 +51,7 @@ export class Config {
         return path.resolve(INDICATED_CONFIG_DIR, CONFIG_NAME);
       case "file":
         exit_with_error(
-          `${INDICATED_CONFIG_DIR} is a file; please indicate a directory to save config by setting SYNV_CONFIG_DIR in your environment`,
+          `${INDICATED_CONFIG_DIR} is a file; please indicate a directory to save config by setting EV_CONFIG_DIR in your environment`,
           ERROR_CODES.INVALID_CONFIG_PATH
         );
         break;

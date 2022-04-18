@@ -1,27 +1,33 @@
 ## What?
-This bot pretty much just exists to tell me when a GPU has become available.
+Synchronize your local environment from a secrets vault.
+
+## Which?
+Just 1password so far.
 
 ## Installation
 
-Clone this repository, and run `yarn install`. The CLI will be available with the command `yarn cli`.
+Clone this repository, and run `yarn install`. The CLI will be available with the command `yarn ev`.
 
-You can use yarn to interface with the CLI, but I recommend creating an alias instead. It's much faster.
-
+You can also generate a binary which will be named `ev`:
 ```bash
-alias cli="./node_modules/.bin/ts-node src/cli.ts"
+# pick your poison, x64 only
+yarn compile:mac
+yarn compile:linux
+yarn compile:win
+```
+
+Or an alias...
+```bash
+alias ev="./src/cli.ts"
 ```
 
 ## Setup
-The bot keeps configuration in `config.json` in the project root. Set it up with your bot like so:
-
+Configuration is stored by default in `$HOME/.config/ev.json`. You can change the location like so:
 ```bash
-cli config --token <your discord token> --client-id <your bots client id>
+export EV_CONFIG_DIR=~/.config/better-place.json
 ```
+You can always check where `ev` is looking for a config file with `ev config locate`.
 
-You can then register the slash commands with your guild (or "server" as they are often called):
-```bash
-cli register <guildId>
-```
 
 ## Attributions
 This project started from the template [typescript-boilerplate](https://github.com/metachris/typescript-boilerplate/tree/v0.4.2), which is a fantastic asset. Thank you, metacris.
