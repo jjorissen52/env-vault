@@ -3,8 +3,9 @@ import chalk from "chalk";
 import { program } from "commander";
 import { textSync } from "figlet";
 
-import _config, { ConfigType } from "./config";
+import _config from "./config";
 import { runPopulate } from "./op";
+import { format } from "util";
 
 program
   .version("0.1.0")
@@ -20,35 +21,17 @@ program
     "CLI for managing env files using 1password as a credentials manager."
   );
 {
-  const config = program.command("config").description("manage config file");
+  const config = program
+    .command("config")
+    .description(
+      "The config subcommand is responsible for displaying and modifying global defaults," +
+        "vault defaults, and comparisons configurations."
+    );
 
   config
     .command("locate")
     .description("shows the path to your config file")
     .action(() => console.log(_config.config_location));
-
-  config
-    .command("defaults")
-    .description("show or set config defaults; use without flags to show")
-    .option("--env <default-env-file-path>")
-    .option("--template <default-env-template-path>")
-    .option("--vault <default-vault-identifier>")
-    .option("--address <default-1password-address>")
-    .option("--email <default-1password-login>")
-    .action(({ env, template, vault, address, email }) => {
-      if (![env, template, vault, address, email].some((v) => !!v)) {
-        _config.show({ comparisons: false });
-        return;
-      }
-      const updates = <Partial<ConfigType>>{};
-      if (env) updates.default_env_file_path = env;
-      if (template) updates.default_template_path = template;
-      if (vault) updates.default_vault = vault;
-      if (address) updates.default_address = address;
-      if (email) updates.default_email = email;
-      _config.set(updates);
-      _config.save();
-    });
 
   config
     .command("show")
@@ -59,38 +42,11 @@ program
         console.log(JSON.stringify(_config.getComparison(comparison), null, 2));
         return;
       }
-      _config.show();
+      _config.show({}, true);
     });
 
   config
-    .command("upsert <config-name>")
-    .description("add env comparison")
-    .option("--record <record>")
-    .option(
-      "--template <env-template-path>",
-      "Override default env template path"
-    )
-    .option("--env <env-file-path>", "Override default env file path")
-    .option(
-      "--address <1password-address>",
-      "Override default 1password address"
-    )
-    .option("--email <1password-email>", "Override default 1password email")
-    .option("--vault <vault>", "Override default 1password vault")
-    .action((name, { template, env, address, email, vault, record }) =>
-      _config.upsertComparison({
-        name,
-        template_path: template,
-        env_file_path: env,
-        address,
-        email,
-        vault,
-        record,
-      })
-    );
-
-  config
-    .command("copy <config-name> <duplicate-config-name>")
+    .command("cp <config-name> <duplicate-config-name>")
     .description("duplicate an existing comparison config")
     .option("-f,--force", "override existing comparison with the same name")
     .action((name, newName, { force }) =>
@@ -98,9 +54,84 @@ program
     );
 
   config
-    .command("remove <config-name>")
+    .command("rm <config-name>")
     .description("remove env comparison")
     .action((name) => _config.removeComparison(name));
+
+  const defaults_blurb = (scope: string): string =>
+    format("show or set %s defaults; use without flags to show", scope);
+  const vault_blurb = (scope: string): string =>
+    format("manage synv vault config for %s", scope);
+
+  config
+    .command("defaults")
+    .description(defaults_blurb("global"))
+    .option("--env <default-env-file-path>")
+    .option("-t,--template <default-env-template-path>")
+    .action(({ env, template }) => {
+      if (![env, template].some((v) => !!v)) {
+        _config.show({ defaults: true });
+        return;
+      }
+      const updates = <Partial<ConfigType>>{};
+      if (env) updates.default_env_file_path = env;
+      if (template) updates.default_template_path = template;
+      _config.patch(updates);
+      _config.save();
+    });
+
+  {
+    const scope = "1password";
+    const _1password = config.command(scope).description(vault_blurb(scope));
+
+    _1password
+      .command("defaults")
+      .description(defaults_blurb(scope))
+      .option("-v,--vault <default-1password-vault-identifier>")
+      .option("-a,--address <default-1password-address>")
+      .option("-e,--email <default-1password-email-login>")
+      .action(({ vault, address, email }) => {
+        if (![vault, address, email].some((v) => !!v)) {
+          _config.show({ "1password": true });
+          return;
+        }
+        _config.patch({
+          vault_defaults: { "1password": { vault, address, email } },
+        });
+        _config.save();
+      });
+
+    _1password
+      .command("set")
+      .description("add or update env comparison")
+      .argument("<name>", "name of comparison to set")
+      .option("-r,--record <record>")
+      .option(
+        "-t,--template <env-template-path>",
+        "override default env template path"
+      )
+      .option("--env <env-file-path>", "Override default env file path")
+      .option(
+        "-a,--address <1password-address>",
+        "Override default 1password address"
+      )
+      .option(
+        "-e,--email <1password-email>",
+        "Override default 1password email"
+      )
+      .option("-v,--vault <vault>", "Override default 1password vault")
+      .action((name, { template, env, address, email, vault, record }) =>
+        _config.upsertComparison(scope, {
+          name,
+          template_path: template,
+          env_file_path: env,
+          address,
+          email,
+          vault,
+          record,
+        })
+      );
+  }
 }
 
 {

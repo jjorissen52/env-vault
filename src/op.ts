@@ -1,7 +1,7 @@
 import { exec, spawnSync } from "child_process";
 import { blueBright, greenBright } from "chalk";
 import { ERROR_CODES, exit_with_error } from "./error";
-import { Comparison, Config } from "./config";
+import { Config } from "./config";
 import { getPathType, write } from "./utils";
 
 function checkInstalled(): void {
@@ -107,7 +107,7 @@ function login(account: AccountData): [string, string] {
 function populate(
   session_var: string,
   session_token: string,
-  { vault, record, template_path, env_file_path }: Comparison,
+  { vault, record, template_path, env_file_path }: FullOnePasswordCmp,
   force = false
 ) {
   exec(

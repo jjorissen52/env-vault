@@ -24,7 +24,7 @@ export const ERROR_NAMES = Object.keys(ERROR_CODES).reduce((accum, name) => {
 export function exit_with_error(
   message: string,
   code: ErrorCode = ERROR_CODES.UNSPECIFIED_ERROR
-): void {
+): never {
   console.error(
     chalk.red(`[ERR(code=${code}): ${ERROR_NAMES[code]}] ${message}`)
   );
