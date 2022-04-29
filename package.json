@@ -1,5 +1,5 @@
 {
-  "name": "env-vault",
+  "name": "@jjorissen52/env-vault",
   "version": "0.1.0",
   "description": "Utility for environment synchronization with credentials vaults.",
   "license": "MIT",
@@ -10,10 +10,13 @@
     "secrets",
     "1password"
   ],
-  "main": "./dist/tsc/main.js",
-  "types": "./dist/tsc/main.d.ts",
+  "main": "dist/cli.js",
+  "types": "dist/cli.d.ts",
+  "files": [
+    "dist"
+  ],
   "bin": {
-    "ev": "./dist/tsc/cli.js"
+    "ev": "dist/cli.js"
   },
   "scripts": {
     "ev": "ts-node src/cli.ts",
@@ -36,7 +39,8 @@
     "postrelease": "yarn clean",
     "postinstall": "husky install",
     "prepack": "pinst --disable",
-    "postpack": "pinst --enable"
+    "postpack": "pinst --enable",
+    "prepare": "yarn --silent build && node dist install"
   },
   "devDependencies": {
     "@types/figlet": "^1.5.4",
@@ -45,13 +49,11 @@
     "@types/node": "^15.0.1",
     "@typescript-eslint/eslint-plugin": "^5.20.0",
     "@typescript-eslint/parser": "^5.20.0",
-    "commander": "^8.2.0",
     "esbuild": "^0.11.11",
     "eslint": "^7.22.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "husky": "^7.0.0",
-    "is-invalid-path": "^1.0.2",
     "jest": "^26.6.3",
     "pinst": "^3.0.0",
     "pkg": "^5.6.0",
@@ -63,13 +65,24 @@
   "dependencies": {
     "axios": "^0.22.0",
     "chalk": "^4.1.2",
+    "commander": "^8.2.0",
     "clear": "^0.1.0",
     "figlet": "^1.5.2",
+    "is-invalid-path": "^1.0.2",
     "lodash": "^4.17.21"
   },
   "pkg": {
     "assets": [
       "node_modules/figlet/fonts/Standard.flf"
     ]
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jjorissen52/env-vault.git"
+  },
+  "author": "JP Jorissen",
+  "bugs": {
+    "url": "https://github.com/jjorissen52/env-vault/issues"
+  },
+  "homepage": "https://github.com/jjorissen52/env-vault#readme"
 }
