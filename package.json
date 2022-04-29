@@ -1,6 +1,6 @@
 {
   "name": "@jjorissen52/env-vault",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Utility for environment synchronization with credentials vaults.",
   "license": "MIT",
   "keywords": [
@@ -40,7 +40,7 @@
     "postinstall": "husky install",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
-    "prepare": "yarn --silent build && node dist install"
+    "prepare": "yarn --silent build"
   },
   "devDependencies": {
     "@types/figlet": "^1.5.4",
@@ -65,8 +65,8 @@
   "dependencies": {
     "axios": "^0.22.0",
     "chalk": "^4.1.2",
-    "commander": "^8.2.0",
     "clear": "^0.1.0",
+    "commander": "^8.2.0",
     "figlet": "^1.5.2",
     "is-invalid-path": "^1.0.2",
     "lodash": "^4.17.21"
