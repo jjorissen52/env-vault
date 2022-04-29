@@ -25,22 +25,15 @@ Legend:
 
 ## Installation
 
-Clone this repository, and run `yarn install`. The CLI will be available with the command `yarn ev`.
-
-You can also generate a binary which will be named `ev`:
+You can add it to your current project with
 ```bash
-# detects your platform
-yarn compile
-# pick your poison, x64 only
-yarn compile:mac
-yarn compile:linux
-yarn compile:win
+npm install @jjorissen52/env-vault
+
+# optional alias (assuming GNU readlink)
+alias ev="$(readlink -f ./node_modules/.bin/ev)"
 ```
 
-Or an alias...
-```bash
-alias ev="./src/cli.ts"
-```
+Or you can download the latest binary, found in the GitHub releases.
 
 ## Setup
 Configuration is stored by default in `$HOME/.config/ev.json`. You can change the location like so:
@@ -67,9 +60,14 @@ Comparison configuration options inherit from these when left unspecified. Note 
 only the 1password vault type is supported.
 
 ### Examples
+**Note: most examples below assume you have an alias or `ev` on your path.**
+
 ```bash
 # show the location where your `ev` config will be stored
-ev config locate
+yarn ev config locate # using yarn
+npx ev config locate # using npm
+ev config locate # alias or binary on path
+
 
 # show your entire ev config
 ev config show
