@@ -8,9 +8,10 @@ import { runPopulate as opPopulate } from "./vaults/op";
 import { format } from "util";
 import { ERROR_CODES, exit_with_error } from "./error";
 import compare from "./compare";
+import { version } from "../package.json";
 
 program
-  .version("0.1.0")
+  .version(version)
   .addHelpText(
     "before",
     `${chalk.blueBright(
