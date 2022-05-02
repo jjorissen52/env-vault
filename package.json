@@ -10,13 +10,13 @@
     "secrets",
     "1password"
   ],
-  "main": "dist/cli.js",
-  "types": "dist/cli.d.ts",
+  "main": "dist/src/cli.js",
+  "types": "dist/src/cli.d.ts",
   "files": [
     "dist"
   ],
   "bin": {
-    "ev": "dist/cli.js"
+    "ev": "dist/src/cli.js"
   },
   "scripts": {
     "ev": "ts-node src/cli.ts",

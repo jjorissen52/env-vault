@@ -7,6 +7,7 @@ fi
 
 cleanup() {
   rm -f ev-macos ev-linux ev-win.exe
+  rm -rf ./dist
 }
 trap cleanup EXIT
 
