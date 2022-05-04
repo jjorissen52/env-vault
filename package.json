@@ -16,7 +16,7 @@
     "dist"
   ],
   "bin": {
-    "ev": "dist/src/cli.js"
+    "ev": "dist/src/bin.js"
   },
   "scripts": {
     "ev": "ts-node src/cli.ts",

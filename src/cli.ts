@@ -10,7 +10,7 @@ import { ERROR_CODES, exit_with_error } from "./error";
 import compare from "./compare";
 import { version } from "../package.json";
 
-program
+export default program
   .version(version)
   .addHelpText(
     "before",
@@ -205,4 +205,8 @@ program
     });
 }
 
-program.parse(process.argv);
+// If this file is being run as a "main" module,
+// we go ahead and execute the cli program.
+if (require.main === module) {
+  program.parse(process.argv);
+}
