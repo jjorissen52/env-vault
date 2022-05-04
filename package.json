@@ -19,7 +19,7 @@
     "ev": "dist/src/bin.js"
   },
   "scripts": {
-    "ev": "ts-node src/cli.ts",
+    "ev": "./src/cli.ts",
     "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "yarn lint --fix",
     "test": "jest",

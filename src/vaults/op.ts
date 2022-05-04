@@ -1,9 +1,9 @@
 import path from "path";
 import isInvalidPath from "is-invalid-path";
-import { exec, spawnSync } from "child_process";
+import { exec } from "child_process";
 import { ERROR_CODES, exit_with_error } from "../error";
 import { blueBright, greenBright } from "chalk";
-import { getPathType, write } from "../utils";
+import { getPathType, write, spawn } from "../utils";
 
 export const OnePasswordResolver: ComparisonResolver<
   OnePasswordDefaults,
@@ -66,10 +66,11 @@ export const OnePasswordResolver: ComparisonResolver<
 };
 
 function checkInstalled(): void {
-  const { error } = spawnSync("command", ["-v", "op"]);
-  if (error)
+  const { status } = spawn("command", ["-v", "op"]);
+  if (status)
     exit_with_error(
-      "1password cli not installed. Install from https://developer.1password.com/docs/cli/get-started#install",
+      "1password cli not available in PATH. Please make sure it's installed and added to your PATH.\n" +
+        "Installation instructions can be found here: https://developer.1password.com/docs/cli/get-started#install",
       ERROR_CODES.OP_NOT_INSTALLED
     );
 }
@@ -89,7 +90,7 @@ function addAccount(address: string, email: string): void {
         `from your 1password profile: https://${address}.1password.com/profile\n`
     )
   );
-  const opAccountAdd = spawnSync(
+  const opAccountAdd = spawn(
     "op",
     [
       "account",
@@ -117,13 +118,13 @@ function checkAccount(
   email: string,
   failfast = false
 ): AccountData {
-  const res = spawnSync("op", ["account", "list", "--format", "json"]);
+  const res = spawn("op", ["account", "list", "--format", "json"]);
   if (res.status) {
     let message = "could not get account list; exiting";
     if (String(res.stderr)) message = `${message}; \n${res.stderr}`;
     exit_with_error(message, ERROR_CODES.OP_LOGIN_FAILURE);
   }
-  const accounts = JSON.parse(res.stdout) as unknown;
+  const accounts = JSON.parse(res.stdout.toString()) as unknown;
   if (!Array.isArray(accounts))
     exit_with_error(
       `op exited with unexpected output: \n${res.stdout ?? res.stderr}`,
@@ -147,7 +148,7 @@ function checkAccount(
 
 function login(account: AccountData): [string, string] {
   const { user_uuid, shorthand } = account;
-  const res = spawnSync("op", ["signin", "--account", shorthand, "--raw"], {
+  const res = spawn("op", ["signin", "--account", shorthand, "--raw"], {
     stdio: ["inherit", "pipe", "pipe"],
   });
   if (res.status) {

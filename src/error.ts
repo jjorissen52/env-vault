@@ -10,6 +10,7 @@ export const ERROR_CODES = {
   COMPARISON_ALREADY_EXISTS: 7,
   ENV_FILE_READ_FAILURE: 8,
   ENV_FILE_WRITE_FAILURE: 9,
+  SHELL_EXECUTION_ERROR: 10,
   OP_NOT_INSTALLED: 101,
   OP_LOGIN_FAILURE: 102,
   OP_UNEXPECTED_OUTPUT: 103,
@@ -28,7 +29,7 @@ export function exit_with_error(
   code: ErrorCode = ERROR_CODES.UNSPECIFIED_ERROR
 ): never {
   console.error(
-    chalk.red(`[ERR(code=${code}): ${ERROR_NAMES[code]}] ${message}`)
+    chalk.red(`[ERR(code=${code}): ${ERROR_NAMES[code]}]\n${message}`)
   );
   process.exit(code);
 }
