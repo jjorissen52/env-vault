@@ -1,8 +1,8 @@
-import { readFileSync, writeFileSync, existsSync } from "fs";
+import { existsSync } from "fs";
 import chalk from "chalk";
 import path from "path";
 import { ERROR_CODES, exit_with_error } from "./error";
-import { getPathType } from "./utils";
+import { getPathType, read, write } from "./utils";
 import { clone, merge } from "lodash";
 // @ts-ignore
 import isInvalidPath from "is-invalid-path";
@@ -38,10 +38,7 @@ export class Config {
       comparisons: {},
     };
     if (existsSync(this.path)) {
-      this.config = merge(
-        this.config,
-        JSON.parse(readFileSync(this.path, "utf-8"))
-      );
+      this.config = merge(this.config, JSON.parse(read(this.path)));
     }
   }
 
@@ -111,7 +108,7 @@ export class Config {
       return accum;
     }, <Record<string, Comparison>>{});
     this.validate(this.config);
-    writeFileSync(this.path, JSON.stringify(this.config, null, 2));
+    write(this.path, JSON.stringify(this.config, null, 2));
     console.info(chalk.greenBright("Config saved successfully."));
   }
 

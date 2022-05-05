@@ -3,7 +3,7 @@ import isInvalidPath from "is-invalid-path";
 import { exec } from "child_process";
 import { ERROR_CODES, exit_with_error } from "../error";
 import { blueBright, greenBright } from "chalk";
-import { getPathType, write, spawn } from "../utils";
+import { write, spawn } from "../utils";
 
 export const OnePasswordResolver: ComparisonResolver<
   OnePasswordDefaults,
@@ -181,22 +181,7 @@ function populate(
           ERROR_CODES.OP_POPULATE_FAILURE
         );
       }
-      const type = getPathType(env_file_path);
-      if (type === "file") {
-        !force &&
-          exit_with_error(
-            `failed to populate; file already exists at ${env_file_path}`,
-            ERROR_CODES.OP_POPULATE_FAILURE
-          );
-        write(env_file_path, stdout);
-      } else if (!type) {
-        write(env_file_path, stdout);
-      } else {
-        exit_with_error(
-          `failed to populate; ${env_file_path} is a directory`,
-          ERROR_CODES.OP_POPULATE_FAILURE
-        );
-      }
+      write(env_file_path, stdout, force);
       console.info(greenBright(`🎉 ${env_file_path} populated!!! 🎉`));
     }
   );
