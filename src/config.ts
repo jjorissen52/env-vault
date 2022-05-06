@@ -24,22 +24,40 @@ type PartialConfigSelector = Partial<
   Record<"defaults" | "comparisons" | keyof typeof ConfigResolvers, boolean>
 >;
 
+const base_config = <ConfigType>{
+  default_env_file_path: "./.env",
+  default_template_path: "./envs/dev.env",
+  vault_defaults: {
+    "1password": {},
+  },
+  comparisons: {},
+};
+
 export class Config {
   private path;
-  private config: ConfigType;
+  private _config: ConfigType | null;
   constructor() {
     this.path = this.config_location;
-    this.config = {
-      default_env_file_path: "./.env",
-      default_template_path: "./envs/dev.env",
-      vault_defaults: {
-        "1password": {},
-      },
-      comparisons: {},
-    };
-    if (existsSync(this.path)) {
-      this.config = merge(this.config, JSON.parse(read(this.path)));
+    this._config = null;
+  }
+
+  get config(): ConfigType {
+    if (!this._config) {
+      this._config = base_config;
+      if (existsSync(this.path)) {
+        if (getPathType(this.path) === "dir")
+          exit_with_error(
+            `Your current config location is a directory; path = ${this.path}`,
+            ERROR_CODES.INVALID_CONFIG_PATH
+          );
+        this._config = merge(this._config, JSON.parse(read(this.path)));
+      }
     }
+    return this._config as ConfigType;
+  }
+
+  set config(conf: ConfigType) {
+    this._config = conf;
   }
 
   get config_location(): string {

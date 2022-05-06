@@ -9,6 +9,7 @@ import { format } from "util";
 import { ERROR_CODES, exit_with_error } from "./error";
 import compare from "./compare";
 import { version } from "../package.json";
+import { getPathType } from "./utils";
 
 export default program
   .version(version)
@@ -34,7 +35,17 @@ export default program
   config
     .command("locate")
     .description("shows the path to your config file")
-    .action(() => console.log(_config.config_location));
+    .action(() => {
+      const location = _config.config_location;
+      if (getPathType(location) === "dir")
+        console.warn(
+          chalk.red(
+            "Your current config location is a directory.\n" +
+              "env-vault will be unable to read or write config to this location."
+          )
+        );
+      console.log(_config.config_location);
+    });
 
   config
     .command("show")
