@@ -1,6 +1,6 @@
 {
   "name": "@jjorissen52/env-vault",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Utility for environment synchronization with credentials vaults.",
   "license": "MIT",
   "keywords": [
