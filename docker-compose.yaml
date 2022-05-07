@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  bats:
+    build:
+      context: .
+      dockerfile: ./tests/bats/Dockerfile
+    command: ./tests/bats/run.sh
+    volumes:
+      - .:/app
