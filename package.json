@@ -1,6 +1,6 @@
 {
   "name": "@jjorissen52/env-vault",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Utility for environment synchronization with credentials vaults.",
   "license": "MIT",
   "keywords": [
@@ -15,7 +15,7 @@
   "files": [
     "dist/package.json",
     "dist/src/*.js",
-    "dist/vaults"
+    "dist/src/vaults"
   ],
   "bin": {
     "ev": "dist/src/cli.js"
