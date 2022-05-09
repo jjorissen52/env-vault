@@ -1,6 +1,1 @@
-// export const write_log = [];
-
-// jest.mock("~/utils", () => ({
-//   ...jest.requireActual("~/utils"),
-//   write: jest.fn(),
-// }));
+process.env.EV_CONFIG_DIR = "/config";

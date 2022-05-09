@@ -1,9 +1,9 @@
 import path from "path";
 import isInvalidPath from "is-invalid-path";
 import { exec } from "child_process";
-import { ERROR_CODES, exit_with_error } from "../error";
+import { ERROR_CODES, exit_with_error } from "~/error";
 import { blueBright, greenBright } from "chalk";
-import { write, spawn } from "../utils";
+import { write, spawn } from "~/utils";
 
 export const OnePasswordResolver: ComparisonResolver<
   OnePasswordDefaults,

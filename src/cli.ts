@@ -194,13 +194,11 @@ export default program
             "The environment variables defined locally differed from the indicated template."
           )
         );
-        if (hint) console.info(chalk.greenBright(hint));
-        process.stdout.write(
-          chalk.blueBright(JSON.stringify(mismatch, null, 2))
-        );
+        if (hint) process.stderr.write(chalk.greenBright(hint));
+        console.log(chalk.blueBright(JSON.stringify(mismatch, null, 2)));
         process.exit(Number(!!fail));
       }
-      console.log("👍");
+      process.stderr.write("👍");
     });
 }
 
