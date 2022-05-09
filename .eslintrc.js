@@ -14,7 +14,11 @@ module.exports = {
   },
   overrides: [
     {
-      files: ["*.ts"],
+      files: ["*.ts", "*.js"],
+      env: {
+        jest: true, // now **/*.test.js files' env has both es6 *and* jest
+      },
+      plugins: ["jest"],
       rules: {
         // typescript itself has a no-undef rule https://typescript-eslint.io/docs/linting/troubleshooting/
         "no-undef": "off",

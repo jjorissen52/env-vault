@@ -13,21 +13,25 @@
   "main": "dist/src/cli.js",
   "types": "dist/src/cli.d.ts",
   "files": [
-    "dist"
+    "dist/package.json",
+    "dist/src/*.js",
+    "dist/vaults"
   ],
   "bin": {
     "ev": "dist/src/bin.js"
   },
   "scripts": {
-    "ev": "./src/cli.ts",
+    "ev": "node dist/src/cli.js",
     "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "yarn lint --fix",
     "test": "jest",
     "clean": "rm -rf dist build package",
     "ts-node": "ts-node",
     "docs": "typedoc --entryPoints src/cli.ts",
-    "build": "tsc -p tsconfig.json",
-    "watch": "tsc --watch -p tsconfig.json",
+    "prebuild": "mkdir -p dist && cp package.json dist/package.json && node scripts/swcrc.js",
+    "build": "swc -q src -d dist/src",
+    "prewatch": "yarn -s prebuild",
+    "watch": "swc -q src -d dist/src -w --log-watch-compilation",
     "precompile": "yarn build",
     "compile": "pkg -o ev .",
     "compile:mac": "pkg -t macos-x64 -o ev .",
@@ -43,15 +47,20 @@
     "prepare": "yarn --silent build"
   },
   "devDependencies": {
+    "@swc/cli": "^0.1.57",
+    "@swc/core": "^1.2.178",
+    "@swc/jest": "^0.2.20",
     "@types/figlet": "^1.5.4",
     "@types/jest": "^27.4.1",
     "@types/lodash": "^4.14.181",
     "@types/node": "^15.0.1",
     "@typescript-eslint/eslint-plugin": "^5.20.0",
     "@typescript-eslint/parser": "^5.20.0",
+    "chokidar": "^3.5.3",
     "esbuild": "^0.11.11",
     "eslint": "^7.22.0",
     "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-jest": "^26.1.5",
     "eslint-plugin-prettier": "^4.0.0",
     "husky": "^7.0.0",
     "jest": "^26.6.3",
@@ -59,7 +68,7 @@
     "pkg": "^5.6.0",
     "prettier": "^2.6.2",
     "ts-jest": "^26.5.4",
-    "ts-node": "^9.1.1",
+    "tsconfig-to-swcconfig": "^1.5.0",
     "typescript": "^4.2.3"
   },
   "dependencies": {
