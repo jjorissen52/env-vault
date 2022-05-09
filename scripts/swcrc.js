@@ -6,6 +6,8 @@ const path = require("path");
 const swcConfig = require("tsconfig-to-swcconfig");
 
 const projectDir = path.dirname(__dirname);
-const swcrc = path.resolve(projectDir, ".swcrc");
+const swcrcPath = path.resolve(projectDir, ".swcrc");
+const swcrc = swcConfig.convert();
+swcrc.module.strict = false;
 
-fs.writeFileSync(swcrc, JSON.stringify(swcConfig.convert(), null, 2));
+fs.writeFileSync(swcrcPath, JSON.stringify(swcrc, null, 2));
