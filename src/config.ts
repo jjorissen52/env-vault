@@ -7,14 +7,14 @@ import { clone, merge } from "lodash";
 // @ts-ignore
 import isInvalidPath from "is-invalid-path";
 import { OnePasswordResolver } from "./vaults/op";
-import * as console from "console";
 
-const CONFIG_NAME = "ev.json";
+export const CONFIG_NAME = "ev.json";
 const DEFAULT_CONFIG_DIR = path.resolve(
   process.env[process.platform === "win32" ? "USERPROFILE" : "HOME"] ?? "HOME",
   ".config/"
 );
-const INDICATED_CONFIG_DIR = process.env.EV_CONFIG_DIR ?? DEFAULT_CONFIG_DIR;
+export const INDICATED_CONFIG_DIR =
+  process.env.EV_CONFIG_DIR ?? DEFAULT_CONFIG_DIR;
 
 const ConfigResolvers = {
   "1password": OnePasswordResolver,
@@ -244,7 +244,3 @@ export class Config {
     );
   }
 }
-
-const config = new Config();
-
-export default config;
