@@ -9,7 +9,11 @@ module.exports = {
     "**/?(*.)+(spec|test).+(ts|tsx|js)",
   ],
   transform: {
-    "^.+\\.(t|j)sx?$": ["@swc/jest"],
+    "^.+\\.(t|j)sx?$": [
+      "@swc/jest",
+      {}, // causes @swc/jest to ignore .swcrc and use defaults for jest
+    ],
   },
   setupFiles: ["<rootDir>/src/testing/setup.ts"],
+  setupFilesAfterEnv: ["<rootDir>/src/testing/setupAfterEnv.ts"],
 };
