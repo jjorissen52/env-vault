@@ -150,6 +150,7 @@ function login(account: AccountData): [string, string] {
   const { user_uuid, shorthand } = account;
   const res = spawn("op", ["signin", "--account", shorthand, "--raw"], {
     stdio: ["inherit", "pipe", "pipe"],
+    timeout: 120_000, // 120s
   });
   if (res.status) {
     let message = "login failure; exiting";
