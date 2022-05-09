@@ -1,7 +1,3 @@
-ev () {
-   ./dist/src/bin.js "$@"
-}
-
 abspath () {
   if command -v "greadlink" > /dev/null; then
     greadlink -f "$1"

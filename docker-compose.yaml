@@ -4,6 +4,6 @@ services:
     build:
       context: .
       dockerfile: ./tests/bats/Dockerfile
-    command: ./tests/bats/run.sh
+    command: bats .
     volumes:
-      - .:/app
+      - ./tests/bats:/app

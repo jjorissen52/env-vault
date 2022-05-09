@@ -18,13 +18,14 @@
     "dist/vaults"
   ],
   "bin": {
-    "ev": "dist/src/bin.js"
+    "ev": "dist/src/cli.js"
   },
   "scripts": {
     "ev": "node dist/src/cli.js",
     "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "yarn lint --fix",
     "test": "jest",
+    "test:e2e": "docker-compose up --build bats",
     "clean": "rm -rf dist build package",
     "ts-node": "ts-node",
     "docs": "typedoc --entryPoints src/cli.ts",
