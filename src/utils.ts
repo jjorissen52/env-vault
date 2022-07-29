@@ -62,8 +62,8 @@ export function spawn(
   ...args: Parameters<typeof spawnSync>
 ): Omit<ReturnType<typeof spawnSync>, "error"> {
   const [command, _args, options] = args;
-  // default timeout is 5 seconds
-  const timeout = options?.timeout ?? 5000;
+  // default timeout is 2 minutes
+  const timeout = options?.timeout ?? 120_000;
   const { error, ...others } = spawnSync(command, _args, {
     ...options,
     timeout,
