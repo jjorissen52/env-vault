@@ -47,11 +47,25 @@ export function write(path: string, contents: string, force = true): void {
   }
 }
 
-export function getPathType(path: string): PathType {
+export function getPathType(
+  path: string,
+  visited: Set<string> = new Set()
+): PathType {
   try {
     const stats = fs.lstatSync(path);
     if (stats.isDirectory()) return "dir";
     if (stats.isFile()) return "file";
+    if (stats.isSymbolicLink()) {
+      if (visited?.has(path))
+        exit_with_error(
+          `Symlink cycle detected; paths in cycle: ${Array.from(visited).join(
+            ", "
+          )}`,
+          ERROR_CODES.SYMLINK_CYCLE_DETECTED
+        );
+      const realPath = fs.realpathSync(path);
+      return getPathType(realPath, visited.add(path));
+    }
   } catch (e) {
     return null;
   }
